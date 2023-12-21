@@ -27,10 +27,10 @@ public class HeatPropagationSimulation implements Callable<Integer> {
     private static double c3 = 1.25;
 
     @Option(names = {"-h", "-height"}, description = "The height of the alloy.")
-    private static int height = 80;
+    private static int height = 100;
 
     @Option(names = {"-w", "-width"}, description = "The width of the alloy.")
-    private static int width = 320;
+    private static int width = 400;
 
     @Option(names = {"-e", "-executionThreshold"}, description = "The number of phases to be executed before the program terminates.")
     private static int threshold = 100000;

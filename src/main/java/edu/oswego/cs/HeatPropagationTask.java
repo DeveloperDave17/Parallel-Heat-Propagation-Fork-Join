@@ -33,7 +33,7 @@ public class HeatPropagationTask extends RecursiveAction {
         int colMidpoint = (colStart + colEnd) >> 1;
         int height = rowEnd - rowStart;
         int width = colEnd - colStart;
-        int calculationThreshold = 15;
+        int calculationThreshold = 64;
         if (height <= calculationThreshold && width <= calculationThreshold) {
             for (int row = rowStart; row < rowEnd; row++) {
                 for (int col = colStart; col < colEnd; col++) {
