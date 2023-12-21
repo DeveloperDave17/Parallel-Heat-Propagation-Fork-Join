@@ -5,6 +5,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Command(name = "HeatPropagation", description = "Runs a heat propagation simulation that utilizes fork join parallelism and jacobi relaxation.")
 public class HeatPropagationSimulation implements Callable<Integer> {
@@ -31,19 +33,57 @@ public class HeatPropagationSimulation implements Callable<Integer> {
     private static int width = 320;
 
     @Option(names = {"-e", "-executionThreshold"}, description = "The number of phases to be executed before the program terminates.")
-    private static int threshold = 10000;
+    private static int threshold = 100000;
+
+    private volatile boolean simulationIsActive;
+
+    private volatile MetalAlloy alloyToBePainted;
 
     @Override
     public Integer call() throws Exception {
         MetalAlloy alloyA = new MetalAlloy(height, width, c1, c2, c3);
         alloyA.setTempOfRegion(s, 0, 0);
+        alloyA.getMetalAlloyRegion(0, 0).calcRGB();
         alloyA.setTempOfRegion(t, height - 1, width - 1);
+        alloyA.getMetalAlloyRegion(height - 1, width - 1).calcRGB();
         MetalAlloy alloyB = new MetalAlloy(height, width, c1, c2, c3);
+        alloyA.deepCopyRegionsTo(alloyB);
+        alloyToBePainted = alloyA;
+        MetalAlloyView metalAlloyView = new MetalAlloyView(height, width, alloyA);
+        metalAlloyView.displayRegions(alloyA);
+        metalAlloyView.display();
+        ExecutorService displayService = Executors.newFixedThreadPool(1);
+        // Activate the display for the simulation
+        simulationIsActive = true;
+        displayService.submit(() -> {
+            while (simulationIsActive) {
+                metalAlloyView.displayRegions(alloyToBePainted);
+                try {
+                    Thread.sleep(80);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        boolean useAForPreOp = true;
+        for (int i = 0; i < threshold; i++) {
+            if (useAForPreOp) {
+                HeatPropagationTask heatPropagationTask = new HeatPropagationTask(alloyA, alloyB, 0, height, 0, width);
+                heatPropagationTask.fork();
+                heatPropagationTask.join();
+                alloyToBePainted = alloyB;
+            } else {
+                HeatPropagationTask heatPropagationTask = new HeatPropagationTask(alloyB, alloyA, 0, height, 0, width);
+                heatPropagationTask.fork();
+                heatPropagationTask.join();
+                alloyToBePainted = alloyA;
+            }
+            useAForPreOp = !useAForPreOp;
+        }
         return 0;
     }
 
     public static void main(String ...args) {
         int exitCode = new CommandLine(new HeatPropagationSimulation()).execute(args);
-        System.exit(exitCode);
     }
 }
