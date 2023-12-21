@@ -408,4 +408,15 @@ public class MetalAlloy {
             e.printStackTrace();
         }
     }
+
+    public void deepCopyRegionsTo(MetalAlloy alloyToStore) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                double tempOfRegion = metalAlloyRegions[i][j].getTemperature();
+                alloyToStore.setTempOfRegion(tempOfRegion, i, j);
+                MetalAlloyRegion region = alloyToStore.getMetalAlloyRegion(i,j);
+                region.deepCopyRegion(metalAlloyRegions[i][j]);
+            }
+        }
+    }
 }
