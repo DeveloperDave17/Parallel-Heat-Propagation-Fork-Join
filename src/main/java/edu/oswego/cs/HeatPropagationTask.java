@@ -11,7 +11,7 @@ public class HeatPropagationTask extends RecursiveAction {
     private final int colEnd;
 
     /**
-     *
+     * A container object that contains all the necessary data to fork the metal alloy problem.
      * @param alloyUsedForCalculations Metal alloy that is treated as immutable and used for calculations
      * @param alloyToStoreResults Metal alloy that is treated as mutable and used to store the results of the calculations.
      * @param rowStart Inclusive row start
@@ -28,6 +28,13 @@ public class HeatPropagationTask extends RecursiveAction {
         this.colEnd = colEnd;
     }
 
+    /**
+     * If the specified metal alloy width and height are less than or equal to the calculationThreshold calculate the
+     * temperature and rgb values for the all the enclosed metal alloy regions; Storing the results after each
+     * calculation. Else break the action down in one of three ways, split in half horizontally, split in half
+     * vertically, or split into four corners. The splitting condition is based entirely on whether the width and/or
+     * height of the specified region is within the calculation threshold.
+     */
     protected void compute() {
         int rowMidpoint = (rowStart + rowEnd) >> 1;
         int colMidpoint = (colStart + colEnd) >> 1;
