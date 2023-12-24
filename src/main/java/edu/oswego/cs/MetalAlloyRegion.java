@@ -136,13 +136,13 @@ public class MetalAlloyRegion implements Serializable {
             g = GTHRESHOLD1;
             b = BTHRESHOLD1;
         } else if (temperature < TEMPTHRESHOLD2) {
-            r = calcColorBetweenThreshold(temperature, RTHRESHOLD1, RTHRESHOLD2, TEMPTHRESHOLD1, TEMPTHRESHOLD2);
-            g = calcColorBetweenThreshold(temperature, GTHRESHOLD1, GTHRESHOLD2, TEMPTHRESHOLD1, TEMPTHRESHOLD2);
-            b = calcColorBetweenThreshold(temperature, BTHRESHOLD1, BTHRESHOLD2, TEMPTHRESHOLD1, TEMPTHRESHOLD2);
+            r = calcColorBetweenThreshold(temperature, RTHRESHOLD1, RTHRESHOLD2, TEMPTHRESHOLD2);
+            g = calcColorBetweenThreshold(temperature, GTHRESHOLD1, GTHRESHOLD2, TEMPTHRESHOLD2);
+            b = calcColorBetweenThreshold(temperature, BTHRESHOLD1, BTHRESHOLD2, TEMPTHRESHOLD2);
         } else if (temperature < TEMPTHRESHOLD3) {
-            r = calcColorBetweenThreshold(temperature, RTHRESHOLD2, RTHRESHOLD3, TEMPTHRESHOLD2, TEMPTHRESHOLD3);
-            g = calcColorBetweenThreshold(temperature, GTHRESHOLD2, GTHRESHOLD3, TEMPTHRESHOLD2, TEMPTHRESHOLD3);
-            b = calcColorBetweenThreshold(temperature, BTHRESHOLD2, BTHRESHOLD3, TEMPTHRESHOLD2, TEMPTHRESHOLD3);
+            r = calcColorBetweenThreshold(temperature, RTHRESHOLD2, RTHRESHOLD3, TEMPTHRESHOLD3);
+            g = calcColorBetweenThreshold(temperature, GTHRESHOLD2, GTHRESHOLD3, TEMPTHRESHOLD3);
+            b = calcColorBetweenThreshold(temperature, BTHRESHOLD2, BTHRESHOLD3, TEMPTHRESHOLD3);
         } else {
             r = RTHRESHOLD3;
             g = GTHRESHOLD3;
@@ -156,11 +156,10 @@ public class MetalAlloyRegion implements Serializable {
      * @param temperature the temperature of the region
      * @param colorThreshold1 the color values starting point
      * @param colorThreshold2 the color values ending point
-     * @param tempThreshold1 the temperature ranges starting point
      * @param tempThreshold2 the temperature ranges ending point
      * @return The calculated color value for a rgb value of the alloy.
      */
-    public int calcColorBetweenThreshold(double temperature, int colorThreshold1, int colorThreshold2, double tempThreshold1, double tempThreshold2) {
+    public int calcColorBetweenThreshold(double temperature, int colorThreshold1, int colorThreshold2, double tempThreshold2) {
         return (int)Math.floor(colorThreshold1 + (temperature * (colorThreshold2 - colorThreshold1) / (tempThreshold2)));
     }
 
