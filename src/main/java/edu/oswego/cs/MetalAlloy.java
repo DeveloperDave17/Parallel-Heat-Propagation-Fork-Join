@@ -14,9 +14,6 @@ public class MetalAlloy {
     private double c2;
     private double c3;
 
-    // Constraints for Tasks
-    private final int NUM_CALCULATIONS_PER_THREAD = 4;
-
     private MetalAlloyRegion[][] metalAlloyRegions;
 
     public MetalAlloy(int height, int width, double c1, double c2, double c3) {
