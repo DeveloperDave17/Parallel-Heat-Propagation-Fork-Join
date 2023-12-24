@@ -16,6 +16,14 @@ public class MetalAlloy {
 
     private MetalAlloyRegion[][] metalAlloyRegions;
 
+    /**
+     * Creates a metal alloy object made up of height * width metal alloy regions
+     * @param height the height of the metal alloy
+     * @param width the width of the metal alloy
+     * @param c1 the first metal of the alloy's thermal constant
+     * @param c2 the second metal of the alloy's thermal constant
+     * @param c3 the third metal of the alloy's thermal constant
+     */
     public MetalAlloy(int height, int width, double c1, double c2, double c3) {
         this.height = height;
         this.width = width;
@@ -40,6 +48,13 @@ public class MetalAlloy {
         return metalAlloyRegions[row][col];
     }
 
+    /**
+     * Calculates the new temperature for a region based on the temperatures of it's bordering neighbors (north, east,
+     * west, south). Utilizes jacobi relaxation to approximates temperatures.
+     * @param row The row of the metal alloy region.
+     * @param col The column of the metal alloy region.
+     * @return The new temperature for the selected region.
+     */
     public double calculateNewTempForRegion(int row, int col) {
         // Don't change the temperature of the top left corner
         if (row == col && row == 0) {
@@ -74,8 +89,10 @@ public class MetalAlloy {
     }
 
     /**
-     * Takes a metal type of either 1, 2, or 3 since a metal alloy is made up of 3 metals.
-     * @return
+     * Takes a metal type of either 1, 2, or 3, since a metal alloy is made up of 3 metals, and sums up the associated
+     * temperature with its neighbors. Each neighbors temperature for a specific metal is calculated as metal percent
+     * present in alloy multiplied by the temperature of the alloy.
+     * @return The summation of metal percent temperatures of all bordering neighbors.
      */
     public double getMetalSummation(int row, int col, int metalType) {
         double metalSummation = 0;
@@ -130,6 +147,10 @@ public class MetalAlloy {
         return width;
     }
 
+    /**
+     * Copies the metal percentages, temperature, and RGB values of every metal alloy region to the target metal alloy.
+     * @param alloyToStore The target metal alloy to store the results of the "deep copy".
+     */
     public void deepCopyRegionsTo(MetalAlloy alloyToStore) {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
