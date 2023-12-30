@@ -22,8 +22,8 @@ public class MetalAlloyView {
 
     public MetalAlloyView(int height, int width, MetalAlloy alloy) {
         metalAlloyFrame = new JFrame("Metal Alloy");
-        int taskBarHeight = Toolkit.getDefaultToolkit().getScreenInsets(metalAlloyFrame.getGraphicsConfiguration()).top;
-        ORIGINAL_HEIGHT = DEFAULT_REGION_SIZE * height;
+        int taskBarHeight = Toolkit.getDefaultToolkit().getScreenInsets(metalAlloyFrame.getGraphicsConfiguration()).top + 10;
+        ORIGINAL_HEIGHT = DEFAULT_REGION_SIZE * height + taskBarHeight;
         ORIGINAL_WIDTH = DEFAULT_REGION_SIZE * width;
         heightScale = 1.0;
         widthScale = 1.0;
@@ -36,7 +36,7 @@ public class MetalAlloyView {
                 Component c = event.getComponent();
                 int height = c.getHeight();
                 int width = c.getWidth();
-                heightScale = (double)height / ORIGINAL_HEIGHT;
+                heightScale = ((double)height - taskBarHeight) / (ORIGINAL_HEIGHT - taskBarHeight);
                 widthScale = (double)width / ORIGINAL_WIDTH;
                 displayRegions(alloy);
             }
